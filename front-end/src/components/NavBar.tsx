@@ -1,11 +1,14 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
 import logo from "../assets/frontend_assets/logo.png";
 import search from "../assets/frontend_assets/search_icon.png"
 import profile from "../assets/frontend_assets/profile_icon.png"
 import cart from "../assets/frontend_assets/cart_icon.png"
+import menu from "../assets/frontend_assets/menu_icon.png"
+import dropdown from "../assets/frontend_assets/dropdown_icon.png"
 
 const NavBar: React.FC = () => {
+  const [visible, setVisible] = useState(false);
   return (
     <div className='flex items-center justify-between py-5 font-medium'>
       <img src={logo} className="w-36" alt="Logo" />
@@ -43,6 +46,20 @@ const NavBar: React.FC = () => {
           <img src={cart} alt='cart' className="w-6 cursor-pointer " />
           <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]'>10</p>
         </Link>
+        <img onClick={() => setVisible(true)} src={menu} alt='menuIcon' className="w-6 cursor-pointer sm:hidden" />
+      </div>
+      {/* side bar menu for small screen */}
+      <div className={`absolute top-0 right-0 bottom-0 overflow-hidden bg-white transition-all ${visible ? 'w-full' : 'w-0'}`}>
+        <div className='flex flex-col text-gray-600'>
+          <div onClick={() => setVisible(false)} className='flex items-center gap-4 p-3 cursor-pointer'>
+            <img src={dropdown} className='h-4 rotate-180' />
+            <p>Back</p>
+          </div>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to='/'>Home</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to='/collection'>Collection</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to='/about'>About</NavLink>
+          <NavLink onClick={() => setVisible(false)} className="py-2 pl-6 border" to='/contact'>Contact</NavLink>
+        </div>
       </div>
     </div>
   );
