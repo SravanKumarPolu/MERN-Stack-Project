@@ -1,27 +1,26 @@
-import React, { createContext, ReactNode } from "react";
-import { products } from "../assets/frontend_assets/assets";
+import React, { createContext, ReactNode } from 'react';
+import { products } from '../assets/frontend_assets/assets'; // Ensure this is properly imported
 
-// Define the shape of the context value
+// Define the shape of the context
 interface ShopContextValue {
   products: typeof products;
   currency: string;
   delivery_fee: number;
 }
 
-// Initialize the context with the appropriate type
+// Create the context
 export const ShopContext = createContext<ShopContextValue | undefined>(undefined);
 
-// Define the props for the provider
 interface ShopContextProviderProps {
   children: ReactNode;
 }
 
-const ShopContextProvider = ({ children }: ShopContextProviderProps) => {
+const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) => {
   const currency = "$";
   const delivery_fee = 10;
 
   const value: ShopContextValue = {
-    products,
+    products, // No need to implement slice here
     currency,
     delivery_fee,
   };
