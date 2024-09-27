@@ -1,6 +1,9 @@
 import React from 'react';
-import { NavLink } from 'react-router-dom';
+import { Link, NavLink } from 'react-router-dom';
 import logo from "../assets/frontend_assets/logo.png";
+import search from "../assets/frontend_assets/search_icon.png"
+import profile from "../assets/frontend_assets/profile_icon.png"
+import cart from "../assets/frontend_assets/cart_icon.png"
 
 const NavBar: React.FC = () => {
   return (
@@ -24,6 +27,23 @@ const NavBar: React.FC = () => {
           <hr className='w-2/4 border-none h-[1.5px] bg-gray-700 hidden' />
         </NavLink>
       </ul>
+      <div className='flex item-center gap-6'>
+        <img src={search} className="w-6 cursor-pointer " alt="Search" />
+        <div className='group relative'>
+          <img src={profile} className="w-6 cursor-pointer " alt='Profile' />
+          <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
+            <div className='flex flex-col gap-2 w-36 px-5 bg-slate-100 text-gray-500 rounded '>
+              <p className='cursor-pointer hover:text-black'>My Profile</p>
+              <p className='cursor-pointer hover:text-black'>Orders</p>
+              <p className='cursor-pointer hover:text-black'>Logout</p>
+            </div>
+          </div>
+        </div>
+        <Link to={'/cart'} className='relative'>
+          <img src={cart} alt='cart' className="w-6 cursor-pointer " />
+          <p className='absolute right-[-5px] bottom-[-5px] w-4 text-center leading-4 bg-black text-white aspect-square rounded-full text-[8px]'>10</p>
+        </Link>
+      </div>
     </div>
   );
 };
