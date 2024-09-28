@@ -1,4 +1,4 @@
-import React from 'react'
+
 import exchangeIcon from '../assets/frontend_assets/exchange_icon.png'
 import qualityIcon from "../assets/frontend_assets/quality_icon.png"
 import supportIcon from "../assets/frontend_assets/support_img.png"
