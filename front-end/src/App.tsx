@@ -11,6 +11,7 @@ import Login from './pages/Login'
 import Cart from './pages/Cart'
 import Order from './pages/Order'
 import NavBar from './components/NavBar'
+import Footer from './components/Footer'
 
 function App() {
 
@@ -30,6 +31,7 @@ function App() {
           <Route path='/place-order' element={<PlaceOrder />} />
           <Route path='/order' element={<Order />} />
         </Routes>
+        <Footer />
       </div>
 
     </>
