@@ -4,3 +4,9 @@
 a.active hr {
   display: block;
 }
+@media (max-width:640pc) {
+  a.active {
+    background-color: gray;
+    color: aliceblue;
+  }
+}
