@@ -1,4 +1,4 @@
-import React from 'react'
+
 import heroimg from "../assets/frontend_assets/hero_img.png"
 
 const Hero = () => {
