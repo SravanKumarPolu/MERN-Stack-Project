@@ -1,29 +1,42 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ShopContext } from '../context/ShopContext';
 import searchIcon from "../assets/frontend_assets/search_icon.png";
 import crossIcon from "../assets/frontend_assets/cross_icon.png";
+import { useLocation } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
-  // Use context safely
   const context = useContext(ShopContext);
 
-  // If context is undefined, don't attempt to destructure it
-  if (!context) {
+  // State and location hooks
+  const [visible, setVisible] = useState<boolean>(false);
+  const location = useLocation();
+
+  // Destructure context values, making sure it's not undefined
+  const { search, setSearch, showSearch, setShowSearch } = context ?? {};
+
+  useEffect(() => {
+    // Unconditionally run the effect and set visibility conditionally inside
+    if (location.pathname.includes('collection') && showSearch) {
+      setVisible(true);
+    } else {
+      setVisible(false);
+    }
+  }, [location, showSearch]);
+
+  // If context is undefined or values are missing, return null early
+  if (!context || !setSearch || !setShowSearch) {
     return null;
   }
 
-  // Destructure context values
-  const { search, setSearch, showSearch, setShowSearch } = context;
-
-  return showSearch ? (
+  return visible ? (
     <div className='border-t border-b bg-gray-50 text-center'>
-      <div className='inline-flex items-center justify-center border border-gray-400 px-5 py-2 my-5 mx-3 rounded-full w-3/4 sm:w-1/2'>
+      <div className='inline-flex items-center justify-center border border-gray-400 bg-white px-5 py-2 my-5 mx-3 rounded-md w-3/4 sm:w-1/2'>
         <input
           value={search}
           onChange={(e) => setSearch(e.target.value)}
           className='flex-1 outline-none bg-inherit text-sm'
           type='text'
-          placeholder='Search'
+          placeholder='Search...'
         />
         <img className='w-4' src={searchIcon} alt='Search Icon' />
       </div>
