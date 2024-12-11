@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useState } from 'react';
+import React, { ReactNode, createContext, useEffect, useState } from 'react';
 
 import { products } from '../assets/frontend_assets/assets';
 
@@ -9,10 +9,11 @@ interface ShopContextValue {
   delivery_fee: number;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-  showSearch: boolean; // Remove optional flag
-  setShowSearch: React.Dispatch<React.SetStateAction<boolean>>; // Remove optional flag
+  showSearch: boolean;
+  setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  cartItems: Record<string, Record<string, number>>;
+  addToCart: (itemId: string, size: string) => void;
 }
-
 
 // Create the context
 export const ShopContext = createContext<ShopContextValue | undefined>(undefined);
@@ -26,6 +27,27 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
   const delivery_fee = 10;
   const [search, setSearch] = useState<string>('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
+  const [cartItems, setCartItems] = useState<Record<string, Record<string, number>>>({});
+
+  const addToCart = (itemId: string, size: string) => {
+    const cartData = structuredClone(cartItems);
+
+    if (cartData[itemId]) {
+      if (cartData[itemId][size]) {
+        cartData[itemId][size] += 1;
+      } else {
+        cartData[itemId][size] = 1;
+      }
+    } else {
+      cartData[itemId] = { [size]: 1 };
+    }
+
+    setCartItems(cartData);
+  };
+
+  useEffect(() => {
+    console.log(cartItems);
+  }, [cartItems]);
 
   const value: ShopContextValue = {
     products,
@@ -33,16 +55,13 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     delivery_fee,
     search,
     setSearch,
-    showSearch,  // Always included
-    setShowSearch,  // Always included
+    showSearch,
+    setShowSearch,
+    cartItems,
+    addToCart,
   };
 
-
-  return (
-    <ShopContext.Provider value={value}>
-      {children}
-    </ShopContext.Provider>
-  );
+  return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
 };
 
 export default ShopContextProvider;

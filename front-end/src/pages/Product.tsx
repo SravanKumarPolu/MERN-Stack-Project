@@ -17,11 +17,13 @@ interface Product {
   date: number;
   bestseller: boolean;
   rating?: number; // Optional rating property
+
 }
+
 
 const Product: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
-  const { products } = useContext(ShopContext) ?? {};
+  const { products, addToCart } = useContext(ShopContext) ?? {};
   const [productData, setProductData] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
@@ -147,7 +149,8 @@ const Product: React.FC = () => {
 
           {/* Add to Cart Button */}
           <div className="mt-6">
-            <button
+            <button 
+              onClick={() => addToCart && addToCart(productData._id, selectedSize)}
               className="w-full sm:w-auto bg-blue-600 text-white text-lg font-medium py-3 px-6 rounded-lg shadow hover:bg-blue-700 transition duration-300"
               disabled={!selectedSize}
             >
