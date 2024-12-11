@@ -1,4 +1,4 @@
-import React, { ReactNode, createContext, useEffect, useState } from 'react';
+import React, { ReactNode, createContext, useState } from 'react';
 
 import { products } from '../assets/frontend_assets/assets';
 
@@ -13,6 +13,7 @@ interface ShopContextValue {
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
   cartItems: Record<string, Record<string, number>>;
   addToCart: (itemId: string, size: string) => void;
+  getCartCount: () => number;
 }
 
 // Create the context
@@ -45,9 +46,21 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     setCartItems(cartData);
   };
 
-  useEffect(() => {
-    console.log(cartItems);
-  }, [cartItems]);
+  const getCartCount = (): number => {
+    let totalCount = 0;
+    for (const items in cartItems) {
+      for (const item in cartItems[items]) {
+        try {
+          if (cartItems[items][item] > 0) {
+            totalCount += cartItems[items][item];
+          }
+        } catch (error) {
+          console.error('Error calculating cart count:', error);
+        }
+      }
+    }
+    return totalCount;
+  };
 
   const value: ShopContextValue = {
     products,
@@ -59,6 +72,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     setShowSearch,
     cartItems,
     addToCart,
+    getCartCount
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
