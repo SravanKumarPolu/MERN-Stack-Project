@@ -1,5 +1,6 @@
-import React, { createContext, ReactNode, useState } from 'react';
-import { products } from '../assets/frontend_assets/assets'; // Ensure this is properly imported
+import React, { ReactNode, createContext, useState } from 'react';
+
+import { products } from '../assets/frontend_assets/assets';
 
 // Define the shape of the context
 interface ShopContextValue {
@@ -8,8 +9,8 @@ interface ShopContextValue {
   delivery_fee: number;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-  showSearch: boolean;
-  setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
+  showSearch?: boolean; // Optional if not used
+  setShowSearch?: React.Dispatch<React.SetStateAction<boolean>>; // Optional if not used
 }
 
 // Create the context
@@ -31,8 +32,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     delivery_fee,
     search,
     setSearch,
-    showSearch,
-    setShowSearch
+    ...(showSearch !== undefined && { showSearch, setShowSearch }), // Only include if used
   };
 
   return (

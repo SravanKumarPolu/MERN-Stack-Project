@@ -1,7 +1,8 @@
-import React, { useContext, useState, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+
 import { ShopContext } from '../context/ShopContext';
-import searchIcon from "../assets/frontend_assets/search_icon.png";
 import crossIcon from "../assets/frontend_assets/cross_icon.png";
+import searchIcon from "../assets/frontend_assets/search_icon.png";
 import { useLocation } from 'react-router-dom';
 
 const SearchBar: React.FC = () => {
@@ -16,7 +17,7 @@ const SearchBar: React.FC = () => {
 
   useEffect(() => {
     // Unconditionally run the effect and set visibility conditionally inside
-    if (location.pathname.includes('collection') && showSearch) {
+    if (location.pathname.includes('collection')) {
       setVisible(true);
     } else {
       setVisible(false);
@@ -28,7 +29,7 @@ const SearchBar: React.FC = () => {
     return null;
   }
 
-  return visible ? (
+  return showSearch && visible ? (
     <div className='border-t border-b bg-gray-50 text-center'>
       <div className='inline-flex items-center justify-center border border-gray-400 bg-white px-5 py-2 my-5 mx-3 rounded-md w-3/4 sm:w-1/2'>
         <input

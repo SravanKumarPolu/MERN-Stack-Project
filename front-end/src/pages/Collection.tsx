@@ -1,27 +1,20 @@
 import { useContext, useEffect, useState } from "react";
-import { ShopContext } from "../context/ShopContext";
-import dropdown_icon from "../assets/frontend_assets/dropdown_icon.png";
-import Title from "../components/Title";
-import ProductItems from "../components/ProductItems";
 
-// Define the type for the product based on your context data
-interface Product {
-  _id: string;
-  name: string;
-  description: string;
-  price: number;
-  image: string[]; // Array of image URLs
-  category: string;
-  subCategory: string;
-  sizes: string[];
-  date: number;
-  bestseller: boolean;
-}
+import ProductItems from "../components/ProductItems";
+import { ShopContext } from "../context/ShopContext";
+import Title from "../components/Title";
+import dropdown_icon from "../assets/frontend_assets/dropdown_icon.png";
 
 const Collection: React.FC = () => {
-  const { products } = useContext(ShopContext) as { products: Product[] }; // Cast context to match the Product[] type
+  const shopContext = useContext(ShopContext);
+
+  if (!shopContext) {
+    throw new Error("ShopContext must be used within a ShopContextProvider");
+  }
+
+  const { products, search, showSearch } = shopContext; // Safe destructuring
   const [showFilter, setShowFilter] = useState<boolean>(false);
-  const [filterProducts, setFilterProducts] = useState<Product[]>([]);
+  const [filterProducts, setFilterProducts] = useState(products);
   const [category, setCategory] = useState<string[]>([]);
   const [subCategory, setSubCategory] = useState<string[]>([]);
   const [sortType, setSortType] = useState<string>('relavent');
@@ -54,11 +47,14 @@ const Collection: React.FC = () => {
   // Apply Category and SubCategory filters
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory]);
+  }, [category, subCategory, search, showSearch]);
 
   // Apply filters based on selected categories
   const applyFilter = () => {
     let productsCopy = [...products];
+    if (search && showSearch) {
+      productsCopy = productsCopy.filter(item => item.name.toLocaleLowerCase().includes(search.toLocaleLowerCase()))
+    }
     if (category.length > 0) {
       productsCopy = productsCopy.filter(item => category.includes(item.category));
     }
