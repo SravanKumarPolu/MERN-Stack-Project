@@ -1,5 +1,6 @@
 import { useContext, useEffect, useState } from "react";
 
+import RelatedProducts from "../components/RelatedProducts";
 import { ShopContext } from "../context/ShopContext";
 import starIcon from "../assets/frontend_assets/star_icon.png"
 import { useParams } from "react-router-dom";
@@ -170,6 +171,7 @@ const Product: React.FC = () => {
         </div>
 
       </div>
+      <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
     </div>
   );
 };

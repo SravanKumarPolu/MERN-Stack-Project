@@ -1,12 +1,13 @@
-import React, { useContext, useState } from 'react';
 import { Link, NavLink } from 'react-router-dom';
-import logo from "../assets/frontend_assets/logo.png";
-import search from "../assets/frontend_assets/search_icon.png"
-import profile from "../assets/frontend_assets/profile_icon.png"
-import cart from "../assets/frontend_assets/cart_icon.png"
-import menu from "../assets/frontend_assets/menu_icon.png"
-import dropdown from "../assets/frontend_assets/dropdown_icon.png"
+import React, { useContext, useState } from 'react';
+
 import { ShopContext } from '../context/ShopContext';
+import cart from "../assets/frontend_assets/cart_icon.png"
+import dropdown from "../assets/frontend_assets/dropdown_icon.png"
+import logo from "../assets/frontend_assets/logo.png";
+import menu from "../assets/frontend_assets/menu_icon.png"
+import profile from "../assets/frontend_assets/profile_icon.png"
+import search from "../assets/frontend_assets/search_icon.png"
 
 const NavBar: React.FC = () => {
   const [visible, setVisible] = useState(false);

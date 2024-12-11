@@ -9,9 +9,10 @@ interface ShopContextValue {
   delivery_fee: number;
   search: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
-  showSearch?: boolean; // Optional if not used
-  setShowSearch?: React.Dispatch<React.SetStateAction<boolean>>; // Optional if not used
+  showSearch: boolean; // Remove optional flag
+  setShowSearch: React.Dispatch<React.SetStateAction<boolean>>; // Remove optional flag
 }
+
 
 // Create the context
 export const ShopContext = createContext<ShopContextValue | undefined>(undefined);
@@ -32,8 +33,10 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     delivery_fee,
     search,
     setSearch,
-    ...(showSearch !== undefined && { showSearch, setShowSearch }), // Only include if used
+    showSearch,  // Always included
+    setShowSearch,  // Always included
   };
+
 
   return (
     <ShopContext.Provider value={value}>
