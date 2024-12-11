@@ -14,6 +14,7 @@ interface ShopContextValue {
   cartItems: Record<string, Record<string, number>>;
   addToCart: (itemId: string, size: string) => void;
   getCartCount: () => number;
+  updateQuantity: (itemId: string, size: string, quantity: number) => void;
 }
 
 // Create the context
@@ -62,6 +63,14 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     return totalCount;
   };
 
+  const updateQuantity = (itemId: string, size: string, quantity: number) => {
+    const cartData = structuredClone(cartItems);
+    if (cartData[itemId] && cartData[itemId][size] !== undefined) {
+      cartData[itemId][size] = quantity;
+    }
+    setCartItems(cartData);
+  };
+
   const value: ShopContextValue = {
     products,
     currency,
@@ -72,7 +81,8 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     setShowSearch,
     cartItems,
     addToCart,
-    getCartCount
+    getCartCount,
+    updateQuantity,
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
