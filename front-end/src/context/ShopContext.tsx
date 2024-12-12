@@ -14,6 +14,7 @@ interface ShopContextValue {
   cartItems: Record<string, Record<string, number>>;
   addToCart: (itemId: string, size: string) => void;
   getCartCount: () => number;
+  getCartAmount: () => number;
   updateQuantity: (itemId: string, size: string, quantity: number) => void;
 }
 
@@ -70,7 +71,24 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     }
     setCartItems(cartData);
   };
-
+  const getCartAmount = (): number => {
+    let totalAmount = 0;
+    for (const items in cartItems) {
+      const itemInfo = products.find((product) => product._id === items);
+      if (itemInfo) {
+        for (const size in cartItems[items]) {
+          try {
+            if (cartItems[items][size] > 0) {
+              totalAmount += itemInfo.price * cartItems[items][size];
+            }
+          } catch (error) {
+            console.error('Error calculating cart amount:', error);
+          }
+        }
+      }
+    }
+    return totalAmount;
+  };
   const value: ShopContextValue = {
     products,
     currency,
@@ -83,6 +101,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     addToCart,
     getCartCount,
     updateQuantity,
+    getCartAmount
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
