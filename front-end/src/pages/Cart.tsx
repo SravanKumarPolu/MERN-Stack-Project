@@ -47,7 +47,7 @@ const Cart: React.FC = () => {
     return <div>Loading...</div>;
   }
 
-  const { products, currency, updateQuantity } = context;
+  const { products, currency, updateQuantity, navigate } = context;
 
   return (
     <div className="border-t pt-14  min-h-screen">
@@ -114,16 +114,19 @@ const Cart: React.FC = () => {
       <div className='flex justify-end my-20'>
         <div className='w-full sm:w-[450px]'>
           <CartTotal />
+          {/* Checkout Button */}
+          <div className="mt-10 text-end">
+            <button
+              onClick={() => navigate('/place-order')}
+              className="px-6 py-3 bg-gray-900 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-blue-700 focus:ring focus:ring-blue-300 transition duration-200">
+              Proceed to Checkout
+            </button>
+          </div>
         </div>
 
       </div>
 
-      {/* Checkout Button */}
-      <div className="mt-10 text-center">
-        <button className="px-6 py-3 bg-blue-600 text-white font-semibold text-lg rounded-lg shadow-md hover:bg-blue-700 focus:ring focus:ring-blue-300 transition duration-200">
-          Proceed to Checkout
-        </button>
-      </div>
+
     </div>
 
   );

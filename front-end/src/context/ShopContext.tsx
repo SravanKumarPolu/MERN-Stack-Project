@@ -1,6 +1,7 @@
 import React, { ReactNode, createContext, useState } from 'react';
 
 import { products } from '../assets/frontend_assets/assets';
+import { useNavigate } from 'react-router-dom';
 
 // Define the shape of the context
 interface ShopContextValue {
@@ -16,6 +17,7 @@ interface ShopContextValue {
   getCartCount: () => number;
   getCartAmount: () => number;
   updateQuantity: (itemId: string, size: string, quantity: number) => void;
+  navigate: ReturnType<typeof useNavigate>;
 }
 
 // Create the context
@@ -31,7 +33,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
   const [search, setSearch] = useState<string>('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<Record<string, Record<string, number>>>({});
-
+  const navigate = useNavigate();
   const addToCart = (itemId: string, size: string) => {
     const cartData = structuredClone(cartItems);
 
@@ -101,7 +103,8 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     addToCart,
     getCartCount,
     updateQuantity,
-    getCartAmount
+    getCartAmount,
+    navigate
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;
