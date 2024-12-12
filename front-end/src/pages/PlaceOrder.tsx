@@ -1,10 +1,19 @@
+import { useContext, useState } from "react"
+
 import CartTotal from "../components/CartTotal"
+import { ShopContext } from "../context/ShopContext"
 import Title from "../components/Title"
 import { assets } from "../assets/frontend_assets/assets"
-import { useState } from "react"
 
 const PlaceOrder = () => {
   const [method, setMethod] = useState('cod')
+
+  const context = useContext(ShopContext)
+  // Handle context being undefined in the render logic
+  if (!context) {
+    return <div>Loading...</div>;
+  }
+  const { navigate } = context;
   return (
     <div className="flex flex-col sm:flex-row justify-between gap-4 pt-5 sm:pt-14 min-h-[80vh] border-t">
       {/* Left side */}
@@ -61,7 +70,9 @@ const PlaceOrder = () => {
           </div>
 
           <div className="w-full text-end mt-8">
-            <button className=" bg-gray-900 text-white px-16 py-3 text-sm">PLACE ORDER</button>
+            <button
+              onClick={() => navigate('/orders')}
+              className=" bg-gray-900 text-white px-16 py-3 text-sm">PLACE ORDER</button>
           </div>
 
         </div>
