@@ -9,7 +9,7 @@ import express from 'express'
 //App config
 const app = express();
 const port = process.env.PORT || 4000
-
+connectDB()
 
 //middlewares
 app.use(express.json())
