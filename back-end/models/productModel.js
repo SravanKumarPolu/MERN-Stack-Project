@@ -8,7 +8,7 @@ const productSchema = new mongoose.Schema({
   subCategory: { type: String, required: true },
   size: { type: Array, required: true },
   bestseller: { type: Boolean },
-  date: { type: Number, required: true }
+  date: { type: Number, required: true },
 })
 const productModel = mongoose.model.product || mongoose.model('product', productSchema)
 export default productModel;
