@@ -3,6 +3,7 @@ import { FormEvent, useState } from "react"
 import { assets } from "../assets/assets"
 import axios from "axios"
 import { backendUrl } from "../App"
+import { toast } from "react-toastify";
 
 interface AddProps {
   token: string;
@@ -41,10 +42,22 @@ const Add: React.FC<AddProps> = ({ token }) => {
 
 
       const response = await axios.post(backendUrl + "/api/product/add", formData, { headers: { token }, })
-      console.log(response.data)
+      if (response.data.success) {
+        toast.success(response.data.message)
+        setName('')
+        setDescription('')
+        setPrice('')
+        setImage1(null)  // Use null instead of false
+        setImage2(null)  // Use null instead of false
+        setImage3(null)  // Use null instead of false
+        setImage4(null)
+      } else {
+        toast.error(response.data.message)
+      }
 
     } catch (error) {
       console.log(error)
+
     }
   }
   return (
