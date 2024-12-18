@@ -16,10 +16,8 @@ interface Product {
   sizes: string[];
   date: number;
   bestseller: boolean;
-  rating?: number; // Optional rating property
-
+  rating?: number;
 }
-
 
 const Product: React.FC = () => {
   const { productId } = useParams<{ productId: string }>();
@@ -27,7 +25,6 @@ const Product: React.FC = () => {
   const [productData, setProductData] = useState<Product | null>(null);
   const [selectedImage, setSelectedImage] = useState<string>("");
   const [selectedSize, setSelectedSize] = useState<string>("");
-  // const [rating, setRating] = useState<number>(0);
 
   useEffect(() => {
     if (products && productId) {
@@ -35,7 +32,6 @@ const Product: React.FC = () => {
       if (product) {
         setProductData(product);
         setSelectedImage(product.image[0]);
-        // setRating(product.rating || 0); // Set rating if available
       }
     }
   }, [products, productId]);
@@ -88,25 +84,16 @@ const Product: React.FC = () => {
 
           {/* Rating */}
           <div className="flex items-center font-medium gap-2 mb-4">
-            {/* <p className="text-lg font-semibold text-yellow-500">{rating}</p> */}
             <div className="flex items-center gap-1 mt-2">
-              <img src={starIcon} alt="" className="w-3 5" />
-              <img src={starIcon} alt="" className="w-3 5" />
-              <img src={starIcon} alt="" className="w-3 5" />
-              <img src={starIcon} alt="" className="w-3 5" />
-              <img src={starIcon} alt="" className="w-3 5" />
+              {[...Array(5)].map((_, index) => (
+                <img
+                  key={index}
+                  src={starIcon}
+                  alt={`Star ${index}`}
+                  className="w-3.5"
+                />
+              ))}
               <p className="pl-2">(111)</p>
-              {/* {Array(5)
-                .fill(3)
-                .map((_4, index) => (
-                  <span
-                    key={index}
-                    className={`text-xl ${index < rating ? "text-yellow-500" : "text-gray-300"
-                      }`}
-                  >
-                    ★
-                  </span>
-                ))} */}
             </div>
           </div>
 
@@ -127,18 +114,22 @@ const Product: React.FC = () => {
               Select Size:
             </label>
             <div className="flex gap-3">
-              {productData.sizes.map((size) => (
-                <button
-                  key={size}
-                  onClick={() => handleSizeChange(size)}
-                  className={`px-4 py-2 border rounded-lg ${selectedSize === size
-                    ? "bg-blue-600 text-white"
-                    : "bg-gray-200 text-gray-700 hover:bg-gray-300"
-                    }`}
-                >
-                  {size}
-                </button>
-              ))}
+              {productData.sizes && productData.sizes.length > 0 ? (
+                productData.sizes.map((size) => (
+                  <button
+                    key={size}
+                    onClick={() => handleSizeChange(size)}
+                    className={`px-4 py-2 border rounded-lg ${selectedSize === size
+                      ? "bg-blue-600 text-white"
+                      : "bg-gray-200 text-gray-700 hover:bg-gray-300"
+                      }`}
+                  >
+                    {size}
+                  </button>
+                ))
+              ) : (
+                <p>No sizes available</p>
+              )}
             </div>
           </div>
 
@@ -149,7 +140,7 @@ const Product: React.FC = () => {
 
           {/* Add to Cart Button */}
           <div className="mt-6">
-            <button 
+            <button
               onClick={() => addToCart && addToCart(productData._id, selectedSize)}
               className="w-full sm:w-auto bg-blue-600 text-white text-lg font-medium py-3 px-6 rounded-lg shadow hover:bg-blue-700 transition duration-300"
               disabled={!selectedSize}
@@ -162,18 +153,18 @@ const Product: React.FC = () => {
             <p>100% Original product.</p>
             <p>Cash on delivery is also available on this product.</p>
             <p>Easy return</p>
-
           </div>
         </div>
       </div>
-      {/* discription and review */}
+
+      {/* Description and Reviews */}
       <div className="mt-20">
         <div className="flex">
           <b className="border px-5 py-3 text-sm">Description</b>
           <p className="border px-5 py-3 text-sm">Reviews(111)</p>
         </div>
-
       </div>
+
       <RelatedProducts category={productData.category} subCategory={productData.subCategory} />
     </div>
   );

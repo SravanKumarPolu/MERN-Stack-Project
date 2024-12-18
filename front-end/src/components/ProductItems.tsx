@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
-import { ShopContext } from '../context/ShopContext';
+
 import { Link } from 'react-router-dom';
+import { ShopContext } from '../context/ShopContext';
 
 // Define the props for the ProductItems component
 interface ProductItemsProps {

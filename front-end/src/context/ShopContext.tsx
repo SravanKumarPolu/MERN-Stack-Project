@@ -1,11 +1,26 @@
-import React, { ReactNode, createContext, useState } from 'react';
+import React, { ReactNode, createContext, useEffect, useState } from 'react';
 
-import { products } from '../assets/frontend_assets/assets';
+import axios from 'axios';
+import { toast } from "react-toastify";
 import { useNavigate } from 'react-router-dom';
 
+interface Product {
+  _id: string;
+  name: string;
+  category: string;
+  subCategory: string;
+  price: number;
+  image: string[];
+  bestseller: boolean;
+  description: string;   // Add missing properties
+  sizes: string[];       // Add missing properties
+  date: number;
+
+  // Add other properties as needed
+}
 // Define the shape of the context
 interface ShopContextValue {
-  products: typeof products;
+  products: Product[];
   currency: string;
   delivery_fee: number;
   search: string;
@@ -30,9 +45,12 @@ interface ShopContextProviderProps {
 const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) => {
   const currency = "$";
   const delivery_fee = 10;
+  const backendUrl = import.meta.env.VITE_BACKEND_URL;
+
   const [search, setSearch] = useState<string>('');
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<Record<string, Record<string, number>>>({});
+  const [products, setProducts] = useState<Product[]>([]);
   const navigate = useNavigate();
   const addToCart = (itemId: string, size: string) => {
     const cartData = structuredClone(cartItems);
@@ -91,6 +109,26 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     }
     return totalAmount;
   };
+  const getProductsData = async () => {
+    try {
+      console.log('Backend URL:', backendUrl);
+      const response = await axios.get(`${backendUrl}/api/product/list`);
+
+      if (response.data) {
+        setProducts(response.data.products)
+      }
+      else {
+        toast.error(response.data.message)
+      }
+    } catch (error) {
+      console.error('Error fetching products:', error);
+    }
+  };
+
+  useEffect(() => {
+    getProductsData();
+  }, []);
+
   const value: ShopContextValue = {
     products,
     currency,

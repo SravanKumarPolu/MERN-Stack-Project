@@ -47,7 +47,7 @@ const Collection: React.FC = () => {
   // Apply Category and SubCategory filters
   useEffect(() => {
     applyFilter();
-  }, [category, subCategory, search, showSearch]);
+  }, [category, subCategory, search, showSearch, products]);
 
   // Apply filters based on selected categories
   const applyFilter = () => {

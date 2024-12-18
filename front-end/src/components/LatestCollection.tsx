@@ -1,7 +1,8 @@
 import React, { useContext, useEffect, useState } from 'react';
+
+import ProductItems from './ProductItems';
 import { ShopContext } from '../context/ShopContext'; // Make sure the context is imported
 import Title from './Title';
-import ProductItems from './ProductItems';
 
 // Define the type for the product based on your context data
 interface Product {
