@@ -26,6 +26,7 @@ interface ShopContextValue {
   search: string;
   token: string; 
   backendUrl: string;
+
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,6 +36,7 @@ interface ShopContextValue {
   getCartCount: () => number;
   getCartAmount: () => number;
   updateQuantity: (itemId: string, size: string, quantity: number) => void;
+  setCartItems: React.Dispatch<React.SetStateAction<Record<string, Record<string, number>>>>;
   navigate: ReturnType<typeof useNavigate>;
 }
 
@@ -147,6 +149,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     search,
     setSearch,
     showSearch,
+    setCartItems,
     setShowSearch,
     cartItems,
     addToCart,

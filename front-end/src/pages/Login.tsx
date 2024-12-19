@@ -5,7 +5,7 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 const Login: React.FC = () => {
-  const [currentState, setCurrentState] = useState<string>("Sign Up");
+  const [currentState, setCurrentState] = useState<string>("Login");
   const shopContext = useContext(ShopContext);
 
   if (!shopContext) {

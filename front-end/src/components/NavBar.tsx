@@ -15,7 +15,14 @@ const NavBar: React.FC = () => {
   if (!context) {
     return null;
   }
-  const { setShowSearch, getCartCount } = context;
+  const { setShowSearch, getCartCount, navigate, token, setToken, setCartItems } = context;
+  const logout = () => {
+    navigate('/login')
+    localStorage.removeItem('token')
+    setToken('')
+    setCartItems({})
+
+  }
   return (
     <div className='flex items-center justify-between py-5 font-medium'>
       <Link to='/'>
@@ -43,17 +50,21 @@ const NavBar: React.FC = () => {
       <div className='flex item-center gap-6'>
         <img onClick={() => setShowSearch(true)} src={search} className="w-6 cursor-pointer " alt="Search" />
         <div className='group relative'>
-          <Link to='/login'>
-            <img src={profile} className="w-6 cursor-pointer " alt='Profile' />
-          </Link>
 
-          <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
-            <div className='flex flex-col gap-2 w-36 px-5 bg-slate-100 text-gray-500 rounded '>
-              <p className='cursor-pointer hover:text-black'>My Profile</p>
-              <p className='cursor-pointer hover:text-black'>Orders</p>
-              <p className='cursor-pointer hover:text-black'>Logout</p>
+          <img
+            onClick={() => token ? null : navigate('/login')}
+            src={profile} className="w-6 cursor-pointer " alt='Profile' />
+          {token && 
+            <div className='group-hover:block hidden absolute dropdown-menu right-0 pt-4'>
+              <div className='flex flex-col gap-2 w-36 px-5 bg-slate-100 text-gray-500 rounded '>
+                <p className='cursor-pointer hover:text-black'>My Profile</p>
+                <p onClick={() => navigate('/orders')} className='cursor-pointer hover:text-black'>Orders</p>
+                <p onClick={logout} className='cursor-pointer hover:text-black'>Logout</p>
+              </div>
             </div>
-          </div>
+          }
+
+
         </div>
         <Link to={'/cart'} className='relative'>
           <img src={cart} alt='cart' className="w-6 cursor-pointer " />
