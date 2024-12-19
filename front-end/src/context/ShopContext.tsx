@@ -24,11 +24,14 @@ interface ShopContextValue {
   currency: string;
   delivery_fee: number;
   search: string;
+  token: string;
+  backendUrl: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
   cartItems: Record<string, Record<string, number>>;
   addToCart: (itemId: string, size: string) => void;
+  setToken: React.Dispatch<React.SetStateAction<string>>;
   getCartCount: () => number;
   getCartAmount: () => number;
   updateQuantity: (itemId: string, size: string, quantity: number) => void;
@@ -51,6 +54,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<Record<string, Record<string, number>>>({});
   const [products, setProducts] = useState<Product[]>([]);
+  const [token, setToken] = useState('');
   const navigate = useNavigate();
   const addToCart = (itemId: string, size: string) => {
     const cartData = structuredClone(cartItems);
@@ -142,7 +146,10 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     getCartCount,
     updateQuantity,
     getCartAmount,
-    navigate
+    token,
+    setToken,
+    navigate,
+    backendUrl
   };
 
   return <ShopContext.Provider value={value}>{children}</ShopContext.Provider>;

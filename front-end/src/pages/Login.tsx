@@ -1,11 +1,41 @@
-import { FormEvent, useState } from "react";
+import { FormEvent, useContext, useState } from "react";
+
+import { ShopContext } from "../context/ShopContext";
+import axios from "axios";
+import { toast } from "react-toastify";
 
 const Login: React.FC = () => {
   const [currentState, setCurrentState] = useState<string>("Sign Up");
-
-  const onSubmitHandler = async (event: FormEvent) => {
+  const { token, setToken, navigate, backendUrl } = useContext(ShopContext);
+  const [name, setName] = useState('')
+  const [password, setPassword] = useState("")
+  const [email, setEmail] = useState('')
+  const onSubmitHandler = async (event) => {
     event.preventDefault();
-    // Handle form submission logic here
+    console.log('Backend URL:', backendUrl);
+    try {
+      if (currentState === "Sign Up") {
+        const response = await axios.post(backendUrl + '/api/user/register', { name, email, password })
+        if (response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem('token', response.data.token)
+        } else {
+          toast.error(response.data.message)
+        }
+      } else {
+        const response = await axios.post(backendUrl + '/api/user/login', { email, password })
+        if (response.data.success) {
+          setToken(response.data.token)
+          localStorage.setItem('token', response.data.token)
+        } else {
+          toast.error(response.data.message)
+        }
+      }
+      // Handle form submission logic here
+    } catch (error) {
+      console.log(error)
+      toast.error(error.message)
+    }
   };
 
   return (
@@ -20,6 +50,7 @@ const Login: React.FC = () => {
       {/* Ternary operator for name */}
       {currentState === "Login" ? null : (
         <input
+          onChange={(e) => setName(e.target.value)} value={name}
           type="text"
           className="w-full px-3 py-2 border border-gray-800"
           placeholder="Name"
@@ -27,13 +58,16 @@ const Login: React.FC = () => {
         />
       )}
       <input
+        onChange={(e) => setEmail(e.target.value)} value={email}
         type="email"
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Email"
         required
       />
       <input
+
         type="password"
+        onChange={(e) => setPassword(e.target.value)} value={password}
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Password"
         required
