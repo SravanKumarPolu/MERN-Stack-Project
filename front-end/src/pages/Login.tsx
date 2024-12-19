@@ -1,4 +1,4 @@
-import { FormEvent, useContext, useState } from "react";
+import { FormEvent, useContext, useEffect, useState } from "react";
 
 import { ShopContext } from "../context/ShopContext";
 import axios from "axios";
@@ -6,37 +6,52 @@ import { toast } from "react-toastify";
 
 const Login: React.FC = () => {
   const [currentState, setCurrentState] = useState<string>("Sign Up");
-  const { token, setToken, navigate, backendUrl } = useContext(ShopContext);
-  const [name, setName] = useState('')
-  const [password, setPassword] = useState("")
-  const [email, setEmail] = useState('')
-  const onSubmitHandler = async (event) => {
+  const shopContext = useContext(ShopContext);
+
+  if (!shopContext) {
+    throw new Error("ShopContextProvider is missing.");
+  }
+
+  const { token, setToken, navigate, backendUrl } = shopContext;
+  const [name, setName] = useState("");
+  const [password, setPassword] = useState("");
+  const [email, setEmail] = useState("");
+
+  const onSubmitHandler = async (event: FormEvent) => {
     event.preventDefault();
-    console.log('Backend URL:', backendUrl);
+    console.log("Backend URL:", backendUrl);
     try {
       if (currentState === "Sign Up") {
-        const response = await axios.post(backendUrl + '/api/user/register', { name, email, password })
+        const response = await axios.post(`${backendUrl}/api/user/register`, { name, email, password });
         if (response.data.success) {
-          setToken(response.data.token)
-          localStorage.setItem('token', response.data.token)
+          setToken(response.data.token);
+          localStorage.setItem("token", response.data.token);
+          toast.success("Registered successfully!");
         } else {
-          toast.error(response.data.message)
+          toast.error(response.data.message);
         }
       } else {
-        const response = await axios.post(backendUrl + '/api/user/login', { email, password })
+        const response = await axios.post(`${backendUrl}/api/user/login`, { email, password });
         if (response.data.success) {
-          setToken(response.data.token)
-          localStorage.setItem('token', response.data.token)
+          console.log(response.data)
+          setToken(response.data.token);
+          localStorage.setItem("token", response.data.token);
+          toast.success("Logged in successfully!");
         } else {
-          toast.error(response.data.message)
+          toast.error(response.data.message);
         }
       }
-      // Handle form submission logic here
     } catch (error) {
-      console.log(error)
-      toast.error(error.message)
+      console.error(error);
+      toast.error("An error occurred. Please try again.");
     }
   };
+  useEffect(() => {
+    if (token) {
+      // For example, navigate to a different page after logging in
+      navigate("/");
+    }
+  }, [token, navigate]);
 
   return (
     <form
@@ -45,12 +60,12 @@ const Login: React.FC = () => {
     >
       <div className="inline-flex items-center gap-2 mb-2 mt-10">
         <p className="prata-regular text-2xl">{currentState}</p>
-        <hr className="border-none h-[1.5px] w-8 bg-gray-800 " />
+        <hr className="border-none h-[1.5px] w-8 bg-gray-800" />
       </div>
-      {/* Ternary operator for name */}
       {currentState === "Login" ? null : (
         <input
-          onChange={(e) => setName(e.target.value)} value={name}
+          onChange={(e) => setName(e.target.value)}
+          value={name}
           type="text"
           className="w-full px-3 py-2 border border-gray-800"
           placeholder="Name"
@@ -58,42 +73,34 @@ const Login: React.FC = () => {
         />
       )}
       <input
-        onChange={(e) => setEmail(e.target.value)} value={email}
+        onChange={(e) => setEmail(e.target.value)}
+        value={email}
         type="email"
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Email"
         required
       />
       <input
-
+        onChange={(e) => setPassword(e.target.value)}
+        value={password}
         type="password"
-        onChange={(e) => setPassword(e.target.value)} value={password}
         className="w-full px-3 py-2 border border-gray-800"
         placeholder="Password"
         required
       />
       <div className="w-full flex justify-between text-sm mt-[-8px]">
-        <p>Forgot your password</p>
+        <p>Forgot your password?</p>
         {currentState === "Login" ? (
-          <p
-            onClick={() => setCurrentState("Sign Up")}
-            className="cursor-pointer"
-          >
+          <p onClick={() => setCurrentState("Sign Up")} className="cursor-pointer">
             Create account
           </p>
         ) : (
-          <p
-            onClick={() => setCurrentState("Login")}
-            className="cursor-pointer"
-          >
+            <p onClick={() => setCurrentState("Login")} className="cursor-pointer">
             Login Here
           </p>
         )}
       </div>
-      <button
-        type="submit"
-        className="bg-black text-white font-light px-8 py-2 mt-4"
-      >
+      <button type="submit" className="bg-black text-white font-light px-8 py-2 mt-4">
         {currentState === "Login" ? "Sign In" : "Sign Up"}
       </button>
     </form>

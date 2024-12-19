@@ -24,7 +24,7 @@ interface ShopContextValue {
   currency: string;
   delivery_fee: number;
   search: string;
-  token: string;
+  token: string; 
   backendUrl: string;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   showSearch: boolean;
@@ -54,7 +54,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
   const [showSearch, setShowSearch] = useState<boolean>(false);
   const [cartItems, setCartItems] = useState<Record<string, Record<string, number>>>({});
   const [products, setProducts] = useState<Product[]>([]);
-  const [token, setToken] = useState('');
+  const [token, setToken] = useState<string>('');
   const navigate = useNavigate();
   const addToCart = (itemId: string, size: string) => {
     const cartData = structuredClone(cartItems);
@@ -131,6 +131,13 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
 
   useEffect(() => {
     getProductsData();
+  }, []);
+
+  useEffect(() => {
+    const storedToken = localStorage.getItem('token');
+    if (storedToken) {
+      setToken(storedToken); // Set the token only if it's not null
+    }
   }, []);
 
   const value: ShopContextValue = {
