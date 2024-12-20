@@ -19,27 +19,30 @@ const Cart: React.FC = () => {
   const [cartData, setCartData] = useState<CartItem[]>([]);
 
   useEffect(() => {
-    if (!context) {
-      // Avoid performing operations if context is not available
-      return;
-    }
+    if (products.length > 0) {
+      if (!context) {
+        // Avoid performing operations if context is not available
+        return;
+      }
 
-    const { cartItems } = context;
-    const tempData: CartItem[] = [];
+      const { cartItems } = context;
+      const tempData: CartItem[] = [];
 
-    for (const itemId in cartItems) {
-      for (const size in cartItems[itemId]) {
-        if (cartItems[itemId][size] > 0) {
-          tempData.push({
-            _id: itemId,
-            size: size,
-            quantity: cartItems[itemId][size],
-          });
+      for (const itemId in cartItems) {
+        for (const size in cartItems[itemId]) {
+          if (cartItems[itemId][size] > 0) {
+            tempData.push({
+              _id: itemId,
+              size: size,
+              quantity: cartItems[itemId][size],
+            });
+          }
         }
       }
+      setCartData(tempData);
+      console.log(tempData);
     }
-    setCartData(tempData);
-    console.log(tempData);
+
   }, [context]); // Only run when context changes
 
   // Handle context being undefined in the render logic

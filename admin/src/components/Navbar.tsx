@@ -1,4 +1,4 @@
-import { assets } from '../assets/assets.ts'
+import { assets } from '../assets/assets.js'
 interface NavbarProps {
   setToken: React.Dispatch<React.SetStateAction<string>>;
 }

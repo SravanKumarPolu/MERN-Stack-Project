@@ -1,5 +1,5 @@
 import { NavLink } from 'react-router-dom'
-import { assets } from '../assets/assets.ts'
+import { assets } from '../assets/assets.js'
 
 const Sidebar = () => {
   return (
