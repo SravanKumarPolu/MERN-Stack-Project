@@ -26,7 +26,7 @@ interface ShopContextValue {
   search: string;
   token: string; 
   backendUrl: string;
-
+  getUserCart: (token: string) => Promise<void>;
   setSearch: React.Dispatch<React.SetStateAction<string>>;
   showSearch: boolean;
   setShowSearch: React.Dispatch<React.SetStateAction<boolean>>;
@@ -99,12 +99,26 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     return totalCount;
   };
 
-  const updateQuantity = (itemId: string, size: string, quantity: number) => {
+  const updateQuantity = async (itemId: string, size: string, quantity: number) => {
     const cartData = structuredClone(cartItems);
     if (cartData[itemId] && cartData[itemId][size] !== undefined) {
       cartData[itemId][size] = quantity;
     }
     setCartItems(cartData);
+    if (token) {
+      try {
+        await axios.post(backendUrl + '/api/cart/update', { itemId, size, quantity }, { headers: { token } });
+      } catch (error) {
+        if (error instanceof Error) {
+          console.log(error);
+          toast.error(error.message);
+        } else {
+          console.log("An unknown error occurred");
+          toast.error("An unknown error occurred");
+        }
+      }
+
+    }
   };
   const getCartAmount = (): number => {
     let totalAmount = 0;
@@ -140,6 +154,22 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     }
   };
 
+  const getUserCart = async (token: string) => {
+    try {
+      const response = await axios.post(backendUrl + '/api/cart/get', {}, { headers: { token } })
+      if (response.data.success) {
+        setCartItems(response.data.cartData)
+      }
+    } catch (error) {
+      if (error instanceof Error) {
+        console.log(error);
+        toast.error(error.message);
+      } else {
+        console.log("An unknown error occurred");
+        toast.error("An unknown error occurred");
+      }
+    }
+  }
   useEffect(() => {
     getProductsData();
   }, []);
@@ -148,6 +178,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     const storedToken = localStorage.getItem('token');
     if (storedToken) {
       setToken(storedToken); // Set the token only if it's not null
+      getUserCart(storedToken);
     }
   }, []);
 
@@ -165,6 +196,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     getCartCount,
     updateQuantity,
     getCartAmount,
+    getUserCart,
     token,
     setToken,
     navigate,
