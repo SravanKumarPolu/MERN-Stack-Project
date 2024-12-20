@@ -1,5 +1,6 @@
 import 'dotenv/config'
 
+import cartRouter from './routes/cartRoute.js';
 import connectCloudinary from './config/cloudinary.js';
 import connectDB from './config/mongodb.js';
 //sravanpolume:username, pass:9OjiMDGPpOeln2Vy
@@ -17,11 +18,12 @@ connectCloudinary()
 
 //middlewares
 app.use(express.json())
-app.use(cors())
+app.use(cors("*"))
 
 //api endpoints
 app.use('/api/user', userRouter)
 app.use('/api/product', productRouter)
+app.use('/api/cart', cartRouter)
 
 app.get('/', (req, res) => {
   res.send("API Working")
