@@ -75,8 +75,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     setCartItems(cartData);
     if (token) {
       try {
-        console.log(backendUrl)
-        console.log(cartData)
+
         await axios.post(backendUrl + '/api/cart/add', { itemId, size }, { headers: { token } })
       } catch (error) {
         console.log(error)
