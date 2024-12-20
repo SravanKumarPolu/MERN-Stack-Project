@@ -13,7 +13,7 @@ interface Product {
   image: string[];
   category: string;
   subCategory: string;
-  sizes: string[];
+  size: string[];
   date: number;
   bestseller: boolean;
   rating?: number;
@@ -114,8 +114,8 @@ const Product: React.FC = () => {
               Select Size:
             </label>
             <div className="flex gap-3">
-              {productData.sizes && productData.sizes.length > 0 ? (
-                productData.sizes.map((size) => (
+              {productData.size && productData.size.length > 0 ? (
+                productData.size.map((size) => (
                   <button
                     key={size}
                     onClick={() => handleSizeChange(size)}

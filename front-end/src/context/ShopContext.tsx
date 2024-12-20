@@ -13,7 +13,7 @@ interface Product {
   image: string[];
   bestseller: boolean;
   description: string;   // Add missing properties
-  sizes: string[];       // Add missing properties
+  size: string[];       // Add missing properties
   date: number;
 
   // Add other properties as needed
@@ -58,7 +58,8 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
   const [products, setProducts] = useState<Product[]>([]);
   const [token, setToken] = useState<string>('');
   const navigate = useNavigate();
-  const addToCart = (itemId: string, size: string) => {
+
+  const addToCart = async (itemId: string, size: string) => {
     const cartData = structuredClone(cartItems);
 
     if (cartData[itemId]) {
@@ -72,6 +73,15 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     }
 
     setCartItems(cartData);
+    if (token) {
+      try {
+        console.log(backendUrl)
+        console.log(cartData)
+        await axios.post(backendUrl + '/api/cart/add', { itemId, size }, { headers: { token } })
+      } catch (error) {
+        console.log(error)
+      }
+    }
   };
 
   const getCartCount = (): number => {
