@@ -1,5 +1,5 @@
-import orderModel from "../models/orderModel"
-import userModel from "../models/userModel"
+import orderModel from "../models/orderModel.js"
+import userModel from "../models/userModel.js"
 
 //Placing orders using COD Method
 const placeOrder = async (req, res) => {

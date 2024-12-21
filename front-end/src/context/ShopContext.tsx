@@ -15,7 +15,7 @@ interface Product {
   description: string;   // Add missing properties
   size: string[];       // Add missing properties
   date: number;
-
+  quantity?: number;
   // Add other properties as needed
 }
 // Define the shape of the context
@@ -197,6 +197,7 @@ const ShopContextProvider: React.FC<ShopContextProviderProps> = ({ children }) =
     updateQuantity,
     getCartAmount,
     getUserCart,
+
     token,
     setToken,
     navigate,
