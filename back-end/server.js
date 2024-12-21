@@ -7,6 +7,7 @@ import connectDB from './config/mongodb.js';
 //mongodb+srv://sravanpolume:9OjiMDGPpOeln2Vy@cluster0.zuxiu.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
 import cors from 'cors'
 import express from 'express'
+import orderRouter from './routes/orderRoute.js';
 import productRouter from './routes/productRout.js';
 import userRouter from './routes/userRoute.js';
 
@@ -24,6 +25,7 @@ app.use(cors("*"))
 app.use('/api/user', userRouter)
 app.use('/api/product', productRouter)
 app.use('/api/cart', cartRouter)
+app.use('/api/order', orderRouter)
 
 app.get('/', (req, res) => {
   res.send("API Working")
