@@ -1,6 +1,6 @@
 import { FormEvent, useState } from "react"
 
-import { assets } from "../assets/assets.js"
+import { assets } from "../assets/assets.ts"
 import axios from "axios"
 import { backendUrl } from "../App"
 import { toast } from "react-toastify";
